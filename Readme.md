@@ -53,6 +53,7 @@ At any further moment, the user may exchange the query Token he received from th
 
 The meta-data and data conveyed by the VAMDC Query Store
 The unique identifier assigned to each query is resolvable (and is both human and machine actionable). The lending page conveys to the user all the metadata associated with the query, and provides access to the underlying data. The conveyed information, together with its structuration, is represented in the following figure
+![QueryStoreDataModel](QueryStoreDataModel.png)
 
 We may see that a set of personal information is stored into the Query Store (essentially, all the queries submitted by a given user). This information is stored only for internal functioning and for providing better user experience. All the public interfaces to the Query Store information are completely de-identified by virtually cutting the link “submitted by” between the Submission class and the Author class.
  * A demonstration of the VAMDC Query Store in action is available at https://youtu.be/kDDWFpi22cU.

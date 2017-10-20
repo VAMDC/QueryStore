@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 05, 2017 at 02:33 PM
--- Server version: 5.5.53-0+deb8u1
--- PHP Version: 5.6.27-0+deb8u1
+-- Generation Time: Oct 20, 2017 at 03:18 PM
+-- Server version: 5.5.55-0+deb8u1
+-- PHP Version: 5.6.30-0+deb8u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `query_store`
 --
+CREATE DATABASE IF NOT EXISTS `query_store` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `query_store`;
 
 -- --------------------------------------------------------
 
@@ -26,6 +28,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `AuthorizedFields`
 --
 
+DROP TABLE IF EXISTS `AuthorizedFields`;
 CREATE TABLE IF NOT EXISTS `AuthorizedFields` (
   `fieldNames` text COLLATE utf8_unicode_ci NOT NULL,
   `authorizedValues` text COLLATE utf8_unicode_ci NOT NULL
@@ -37,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `AuthorizedFields` (
 -- Table structure for table `AuthorizedParameters`
 --
 
+DROP TABLE IF EXISTS `AuthorizedParameters`;
 CREATE TABLE IF NOT EXISTS `AuthorizedParameters` (
   `paramName` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -44,9 +48,26 @@ CREATE TABLE IF NOT EXISTS `AuthorizedParameters` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `Errors`
+--
+
+DROP TABLE IF EXISTS `Errors`;
+CREATE TABLE IF NOT EXISTS `Errors` (
+  `UUID` text COLLATE utf8_unicode_ci,
+  `Token` text COLLATE utf8_unicode_ci,
+  `ErrorMessage` text COLLATE utf8_unicode_ci,
+  `Parameters` text COLLATE utf8_unicode_ci,
+  `Timestamp` text COLLATE utf8_unicode_ci,
+  `Phase` text COLLATE utf8_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `Notifications`
 --
 
+DROP TABLE IF EXISTS `Notifications`;
 CREATE TABLE IF NOT EXISTS `Notifications` (
   `timestamp` text COLLATE utf8_unicode_ci NOT NULL,
   `queryToken` text COLLATE utf8_unicode_ci NOT NULL,
@@ -67,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `Notifications` (
 -- Table structure for table `Queries`
 --
 
+DROP TABLE IF EXISTS `Queries`;
 CREATE TABLE IF NOT EXISTS `Queries` (
   `UUID` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `accededResource` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -84,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `Queries` (
 -- Table structure for table `QueryUserLink`
 --
 
+DROP TABLE IF EXISTS `QueryUserLink`;
 CREATE TABLE IF NOT EXISTS `QueryUserLink` (
   `UUID` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `timestamp` bigint(20) NOT NULL,
@@ -100,10 +123,12 @@ CREATE TABLE IF NOT EXISTS `QueryUserLink` (
 -- Table structure for table `TechConfig`
 --
 
+DROP TABLE IF EXISTS `TechConfig`;
 CREATE TABLE IF NOT EXISTS `TechConfig` (
   `ServletContainerAddress` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `AbsoluteDataPath` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `AbsoluteConfigPath` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+  `AbsoluteConfigPath` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `secret` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -114,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `TechConfig` (
 -- Indexes for table `Queries`
 --
 ALTER TABLE `Queries`
- ADD PRIMARY KEY (`UUID`);
+ ADD PRIMARY KEY (`UUID`), ADD UNIQUE KEY `UUID` (`UUID`);
 
 --
 -- Indexes for table `TechConfig`

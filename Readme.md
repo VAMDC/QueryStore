@@ -56,7 +56,7 @@ The unique identifier assigned to each query is resolvable (and is both human an
 ![QueryStoreDataModel](QueryStoreDataModel.png)
 
 We may see that a set of personal information is stored into the Query Store (essentially, all the queries submitted by a given user). This information is stored only for internal functioning and for providing better user experience. All the public interfaces to the Query Store information are completely de-identified by virtually cutting the link “submitted by” between the Submission class and the Author class.
- * The implementing note of the VAMDC Query Store is available at https://github.com/VAMDC/QueryStore/blob/master/ImplementingNote.pdf
+ * The implementing note of the VAMDC Query Store is available at https://github.com/VAMDC/QueryStore/blob/master/documentation/ImplementingNote.pdf
  * A demonstration of the VAMDC Query Store in action is available at https://youtu.be/kDDWFpi22cU.
  * A presentation focused on the implementation of the VAMDC Query Store is available at https://youtu.be/rfHfnPvH1r4.
 The implemented Query Store may be easily adapted to a wide number of cases:

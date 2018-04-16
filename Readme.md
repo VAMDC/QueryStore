@@ -20,7 +20,9 @@ All the data-Nodes are listed into registries (a kind of yellow pages services f
 wishing to extract data from VAMDC:
   * May use client software: while receiving a query, the client asks the registries what are the available data-Nodes, and then dispatches the query to all these node. Each node produces a standardized output file. The client software collects all the produced results and finally serves to the user the result.
   * May submit his/her queries directly to the specific node he/she wants to hit.
-Indeed, VAMDC is a distributed architecture with no central management system. The RDA-Data Citation recommendation comes for 
+Indeed, VAMDC is a distributed architecture with no central management system. 
+
+The RDA-Data Citation recommendation comes for 
 standalone data-repositories and/or warehouses. How to implement the recommendation in the VAMDC distributed infrastructure? 
 The solution belongs to a space with lot of constraints:
  * Any evolution will impact each of the (today ~30) federated databases.

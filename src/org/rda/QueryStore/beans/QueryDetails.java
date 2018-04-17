@@ -75,7 +75,7 @@ public class QueryDetails {
 			List<QueryInvocationDetails> queryInvocationDetails) {
 		this.queryInvocationDetails = queryInvocationDetails;
 	}
-	
+
 	public String getQueryToken() {
 		return queryToken;
 	}
@@ -83,7 +83,23 @@ public class QueryDetails {
 	public void setQueryToken(String queryToken) {
 		this.queryToken = queryToken;
 	}
-	
+
+	public String getDOI() {
+		return DOI;
+	}
+
+	public void setDOI(String dOI) {
+		DOI = dOI;
+	}
+
+	public String getDoiSubmitId() {
+		return DoiSubmitId;
+	}
+
+	public void setDoiSubmitId(String doiSubmitId) {
+		DoiSubmitId = doiSubmitId;
+	}
+
 	private String UUID;
 	private String accededResource;
 	private String resourceVersion;
@@ -93,7 +109,8 @@ public class QueryDetails {
 	private String queryRexecutionLink;
 	private String bibliographicReferences;
 	private String queryToken;
-	
+	private String DOI;
+	private String DoiSubmitId;
 
 	private List<QueryInvocationDetails> queryInvocationDetails;
 

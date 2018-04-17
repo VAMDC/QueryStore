@@ -23,38 +23,27 @@ import org.rda.QueryStore.helper.Helper;
  */
 @WebServlet("/FindQueries")
 public class FindQueriesByTime extends HttpServlet {
-	
+
 	private static final String INF_TIME = "from";
 	private static final String SUP_TIME = "to";
 	private static final String QUERY_TYPE = "queryType";
-	
+
 	private static final long serialVersionUID = 1L;
-	
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public FindQueriesByTime() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try {
-			writeServerResponse(request, response);
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+	public FindQueriesByTime() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		try {
 			writeServerResponse(request, response);
 		} catch (ClassNotFoundException | SQLException e) {
@@ -62,9 +51,24 @@ public class FindQueriesByTime extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		try {
+			writeServerResponse(request, response);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	private void writeServerResponse(HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ClassNotFoundException, SQLException {
+			HttpServletResponse response) throws IOException,
+			ClassNotFoundException, SQLException {
 		response.setContentType("application/json");
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setCharacterEncoding("UTF-8");
@@ -73,28 +77,33 @@ public class FindQueriesByTime extends HttpServlet {
 		page.println(convertOutputToJson(getQueriesIds(request)));
 		page.close();
 	}
-	
-	private List<String> getQueriesIds(HttpServletRequest request) throws ClassNotFoundException, SQLException{
+
+	private List<String> getQueriesIds(HttpServletRequest request)
+			throws ClassNotFoundException, SQLException {
 		String timeInf = request.getParameter(INF_TIME);
 		String timeSup = request.getParameter(SUP_TIME);
-		String queryType= request.getParameter(QUERY_TYPE);
-		return QueryDao.getInstance().getQueriesIdsByTime(timeInf, timeSup, queryType);
+		String queryType = request.getParameter(QUERY_TYPE);
+		return QueryDao.getInstance().getQueriesIdsByTime(timeInf, timeSup,
+				queryType);
 	}
-	
-	private String convertOutputToJson(List<String> idsList) throws ClassNotFoundException, SQLException{
+
+	private String convertOutputToJson(List<String> idsList)
+			throws ClassNotFoundException, SQLException {
 		JSONObject returnedObject = new JSONObject();
 		JSONArray queriesResume = new JSONArray();
-		for(String currentId : idsList){
+		for (String currentId : idsList) {
 			queriesResume.add(getQueryResume(currentId));
 		}
 		returnedObject.put("Queries", queriesResume);
 		return returnedObject.toJSONString();
 	}
-	
-	private JSONObject getQueryResume(String queryId) throws ClassNotFoundException, SQLException{
-		JSONObject returnedObject=new JSONObject();
-		QueryDetails detailedQuery = QueryDao.getInstance().getQueryInfo(queryId);
-		
+
+	private JSONObject getQueryResume(String queryId)
+			throws ClassNotFoundException, SQLException {
+		JSONObject returnedObject = new JSONObject();
+		QueryDetails detailedQuery = QueryDao.getInstance().getQueryInfo(
+				queryId);
+
 		returnedObject.put("UUID", detailedQuery.getUUID());
 		returnedObject.put("accededResource",
 				detailedQuery.getAccededResource());
@@ -103,6 +112,7 @@ public class FindQueriesByTime extends HttpServlet {
 				detailedQuery.getResourceVersion());
 		returnedObject.put("outputFormatVersion",
 				detailedQuery.getOutputFormatVersion());
+		returnedObject.put("DOI", detailedQuery.getDOI());
 
 		JSONArray parameters = new JSONArray();
 		List<String> paramersList = Helper.getInstance().decodeParam(
@@ -111,21 +121,9 @@ public class FindQueriesByTime extends HttpServlet {
 			parameters.add(currentString);
 		}
 		returnedObject.put("parameters", parameters);
+		returnedObject.put("LastExecutionTimestamp", detailedQuery
+				.getQueryInvocationDetails().get(0).getTimestamp());
 
-		JSONArray queryInvocations = new JSONArray();
-		for (int i = 0; i < detailedQuery.getQueryInvocationDetails()
-				.size(); i++) {
-			JSONObject queryDetail = new JSONObject();
-			queryDetail.put("timestamp", detailedQuery
-					.getQueryInvocationDetails().get(i).getTimestamp());
-			queryDetail.put("queryToken", detailedQuery
-					.getQueryInvocationDetails().get(i).getQueryToken());
-			queryInvocations.add(queryDetail);
-		}
-
-		returnedObject.put("queryInvocationDetails", queryInvocations);
-		
-		
 		return returnedObject;
 	}
 

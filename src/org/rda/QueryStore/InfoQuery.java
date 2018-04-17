@@ -132,6 +132,7 @@ public class InfoQuery extends HttpServlet {
 					detailedQuery.getQueryRexecutionLink());
 			queryDetails.put("biblioGraphicReferences",
 					detailedQuery.getBibliographicReferences());
+			queryDetails.put("DOI", detailedQuery.getDOI());
 
 			JSONArray parameters = new JSONArray();
 			List<String> paramersList = Helper.getInstance().decodeParam(

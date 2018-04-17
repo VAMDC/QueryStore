@@ -197,7 +197,7 @@ public class QueryDao {
 	public QueryDetails getQueryInfo(String queryId) throws SQLException,
 			ClassNotFoundException {
 		QueryDetails toReturn = null;
-		String query = "select UUID, accededResource, resourceVersion, outputFormatVersion, dataURL, canonicalParameters, queryRexecutionLink, biblioGraphicReferences from Queries where UUID=?";
+		String query = "select UUID, accededResource, resourceVersion, outputFormatVersion, dataURL, canonicalParameters, queryRexecutionLink, biblioGraphicReferences, Doi, DoiSubmitId from Queries where UUID=?";
 
 		Connection conn = DBConnectionBuilder.getInstance().getConnection();
 
@@ -217,6 +217,8 @@ public class QueryDao {
 			toReturn.setQueryRexecutionLink(rs.getString("queryRexecutionLink"));
 			toReturn.setBibliographicReferences(rs
 					.getString("biblioGraphicReferences"));
+			toReturn.setDOI("Doi");
+			toReturn.setDoiSubmitId("DoiSubmitId");
 		}
 		if (null != toReturn) {
 			QueryDao.getInstance().getQueryInvocationDetails(toReturn, conn);
@@ -229,7 +231,7 @@ public class QueryDao {
 	private QueryDetails getQueryInvocationDetails(QueryDetails queryBean,
 			Connection conn) throws SQLException {
 
-		String query = "select timestamp, queryToken from QueryUserLink where UUID=?";
+		String query = "select timestamp, queryToken from QueryUserLink where UUID=? order by timestamp DESC";
 
 		PreparedStatement ps = conn.prepareStatement(query);
 		ps.setString(1, queryBean.getUUID());
@@ -280,6 +282,30 @@ public class QueryDao {
 		}
 		conn.close();
 		return toReturn;
+	}
+	
+	
+	public void putDOI(String Doi, String DoiSubmitID, String queryUUID) throws ClassNotFoundException, SQLException{
+		String sqlQuery = "update Queries set Doi=?, DoiSubmitId=? where UUID=?";
+		Connection conn = DBConnectionBuilder.getInstance().getConnection();
+		try {
+			conn = DBConnectionBuilder.getInstance().getConnection();
+			PreparedStatement ps = conn.prepareStatement(sqlQuery);
+			ps.setString(1, Doi);
+			ps.setString(2, DoiSubmitID);
+			ps.setString(3, queryUUID);
+			ps.execute();
+			
+			conn.commit();
+
+		} catch (Exception e) {
+			conn.rollback();
+			e.printStackTrace();
+		} finally {
+			conn.close();
+		}
+		
+		
 	}
 
 	public void associateQueryToUser(String queryToken, String userEmail,
